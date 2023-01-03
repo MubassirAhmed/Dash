@@ -600,10 +600,27 @@ zerothDiv = html.Div([
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
+            dbc.Row([
+                dbc.Col([html.Div([
+                    html.H1("Linkedin Job Tracker", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
+                    html.H3("This app is built on top of an ELT pipeline, with Python, Dash, SQL, Pandas and CSS. It queries data from a Snowflake warehouse", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),],
+                     )],width=8),
 
-            html.H1("Linkedin Job Tracker", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
-            html.H3('',style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
+                dbc.Col(html.A(
+                    href="https://github.com/MubassirAhmed/Dash",
+                    children=[
+                        html.Img(
+                            alt="Link to my twitter",
+                            src="assets/GitHub_Logo.png",
+                            style={'float':'right', 'padding-right':'20px'}
+                        )
+                    ]
+                    ), width=4)
+            ]),
 
+            
+            
+            #html.Img(src='assets/GitHub_Logo.png',style={'text-align':'right'}),
 
             dbc.Row([
                 dbc.Col(html.Div(firstCard), width=True),
@@ -686,4 +703,4 @@ def update_chart2_slider(chart2_time_range_type):
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
