@@ -1,11 +1,55 @@
 
 body {
-    background-color: #192444;
+    background-color: #20242A;
     margin: 5%;
   }
   
   #title1 {
     text-align: center;
+  }
+
+  .card-body {
+    background-color: #323D53;
+  }
+
+/*
+  [class*="rc-"], [class*="slider-"], [class*="-slider"], [class*="-slider-"],  .rc-slider-track, .rc-slider-rail, .rc-slider-step {
+    margin: 20px;
+
+  }
+
+  .chart2-time-range-slider, .rc-slider-with-marks{
+    background-color:#6DFFA0;
+    border-color: #6DFFA0;
+    border: #6DFFA0;
+  }
+*/
+
+[class*='-time-range-type'] {
+  color: #8DC6FF;
+  background-color: #8DC6FF;
+}
+
+
+  .rc-slider-dot-active, .rc-slider-handle {
+    background-color:#6DFFA0 !important;
+    border-color: #6DFFA0 !important;
+    border: #6DFFA0 !important;
+  }
+
+  .rc-slider-mark-text {
+    color: #698C75;
+  }
+
+  .rc-slider-step {
+    border-color: #6DFFA0 !important;
+    border: #6DFFA0 !important;
+  }
+
+  h6,h4, p {
+    color: #8DC6FF;
+    font-family: "Times New Roman";
+
   }
   
   #title2 {
@@ -59,7 +103,7 @@ body {
   }
   
   .rc-slider-track {
-    background-color: red;
+    background-color: #2ffec1;
   }
   
   .rc-slider-dot-active {

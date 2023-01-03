@@ -8,6 +8,12 @@ import dash_bootstrap_components as dbc
 from num2words import num2words
 
 
+white_button_style = {'background-color': 'white',
+                      'color': 'black',
+                      'height': '50px',
+                      'width': '100px',
+                      'margin-top': '50px',
+                      'margin-left': '50px'}
 
 def get_snowflake_connector():
     os.environ['SNOW_USER']='mvbashxr'
@@ -46,7 +52,7 @@ con = get_snowflake_connector()
 cur =  con.cursor()
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-app = Dash(external_stylesheets=[dbc.themes.SKETCHY])
+app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 application = app.server
 
 
@@ -84,7 +90,8 @@ table1_layout=dash_table.DataTable(
         'whiteSpace': 'normal',
         'height': 'auto',
         'textAlign': 'center',
-        'lineHeight': '15px'
+        'lineHeight': '15px',
+        'background-color':'#252B34', 'color':'#6DFFA0', 'border-color':'red'
         },
     style_as_list_view = True,
     style_table={'height': '475px', 'overflowY': 'auto'},
@@ -94,7 +101,7 @@ table1_layout=dash_table.DataTable(
 firstCard  = dbc.Card(dbc.CardBody([
                 html.H6("New Jobs in last 5 hrs: ", style={'text-align': 'center'}),
                 html.P("Quick filter by experience using the bars in the Demand for Years of Experience chart"),
-                html.Div(id='YoE-Print', style={'text-align': 'center'}),
+                html.Div(id='YoE-Print', style={'text-align': 'center', 'color': '#8DC6FF', 'font-family':'Times New Roman'}),
                 table1_layout]))
 
 
@@ -102,22 +109,22 @@ def HDW_radio_button(chartName):
     return html.Div(
         dcc.RadioItems([
         {
-         'label':html.Div(['Hours ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+         'label':html.Div(['Hours ago'],style={'padding':'0px 20px 10px', 'margin-top':'-15px', 'color':'#8DC6FF'}),
          'value':'hour',
         },
         {
-         'label':html.Div(['Days ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+         'label':html.Div(['Days ago'],style={'padding':'0px 20px 10px', 'margin-top':'-15px', 'color':'#8DC6FF'}),
          'value':'day',
         },
         {
-         'label':html.Div(['Weeks ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+         'label':html.Div(['Weeks ago'],style={'padding':'0px 20px 10px', 'margin-top':'-15px', 'color':'#8DC6FF'}),
          'value':'week',
         }
 
         ], value='hour',
         id='{}-time-range-type'.format(chartName),
         inline=True)
-    , style={'padding': '0px 20px 20px 0px'})
+    , style={'padding': '0px 20px 20px 0px', 'color':'#8DC6FF'})
 
 #TODO 2. Years of Exp Required
     #? clicking on smth here will send it as an input to The Table
@@ -135,13 +142,11 @@ cur.execute(query2)
 data2 = cur.fetch_pandas_all().apply(pd.to_numeric)
 data2.columns = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
 data2 = data2.sum()
-chart2 = px.bar(data2, x=data2.index, y=data2,
-                labels={
-                     "data2.index": "Years of Experience Required",
-                     "data2": "No. of Jobs",
-                 },
-                #template="simple_white"
-                )
+chart2 = px.bar(data2, x=data2.index, y=data2,template='simple_white'
+                ).update_layout(
+    xaxis_title="Years of Experience Required", yaxis_title="No. of Jobs", font_color="#6DFFA0",
+    font_family="Times New Roman",paper_bgcolor='#252B34',
+    plot_bgcolor='#252B34',).update_traces(marker_color='#6DFFA0')
 chart2_layout= dcc.Graph(id='YoE',figure=chart2)
 secondCard  = dbc.Card(dbc.CardBody([
 
@@ -152,15 +157,15 @@ secondCard  = dbc.Card(dbc.CardBody([
                         html.Div(
                             dcc.RadioItems([
                             {
-                             'label':html.Div(['Hours ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+                             'label':html.Div(['Hours ago'],style={'padding':'0px 20px 10px', 'margin-top':'-20px', 'color':'#8DC6FF'}),
                              'value':'hour',
                             },
                             {
-                             'label':html.Div(['Days ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+                             'label':html.Div(['Days ago'],style={'padding':'0px 20px 10px', 'margin-top':'-20px', 'color':'#8DC6FF'}),
                              'value':'day',
                             },
                             {
-                             'label':html.Div(['Weeks ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+                             'label':html.Div(['Weeks ago'],style={'padding':'0px 20px 10px', 'margin-top':'-20px', 'color':'#8DC6FF'}),
                              'value':'week',
                             }
                             ], value='hour',
@@ -242,9 +247,11 @@ WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp);
 '''
 cur.execute(query3)
 data3 = cur.fetch_pandas_all().apply(pd.to_numeric).sum()
-chart3 = px.bar(data3, x=data3.index, y=data3,
-        #template="simple_white"
-        )
+chart3 = px.bar(data3, x=data3.index, y=data3,template='simple_white' 
+        ).update_layout(
+    xaxis_title="Skills Required", yaxis_title="No. of Jobs", font_color="#6DFFA0",
+    font_family="Times New Roman",paper_bgcolor='#252B34',
+    plot_bgcolor='#252B34',).update_traces(marker_color='#6DFFA0')
 chart3_layout = dcc.Graph(id='skills',figure=chart3)
 thirdCard = dbc.Card(dbc.CardBody([
             html.H6("Skills/Tools Required", style={'text-align': 'center'}),
@@ -325,9 +332,11 @@ def update_chart3(time_range_slider_value, time_range_type):
         '''.format(time_range_type,dateAdd_Step)
     cur.execute(query3)
     data3 = cur.fetch_pandas_all().apply(pd.to_numeric).sum()
-    chart3 = px.bar(data3, x=data3.index, y=data3,
-    #template="simple_white"
-    )
+    chart3 = px.bar(data3, x=data3.index, y=data3,template = 'simple_white' 
+    ).update_layout(
+    xaxis_title="Skills Required", yaxis_title="No. of Jobs", font_color="#6DFFA0",
+    font_family="Times New Roman",paper_bgcolor='#252B34',
+    plot_bgcolor='#252B34',).update_traces(marker_color='#6DFFA0')
     return chart3
 
 @app.callback(
@@ -386,20 +395,20 @@ table4_layout = dash_table.DataTable(
                                             'textAlign': 'left','lineHeight': '15px',
                                             'overflow': 'hidden',
                                             'textOverflow': 'ellipsis',
-                                            'maxWidth': 0},
+                                            'maxWidth': 0, 'background-color':'#252B34', 'color':'#6DFFA0',},
                                 data=table4.to_dict('records'),
                                 columns=[{'id': x, 'name': x, 'presentation': 'markdown'} if x == 'Title' else {'id': x, 'name': x} for x in table4.columns],
                                 style_as_list_view=True,
                                 style_table={'height': '600px', 'overflowY': 'auto', 'overflowX': 'auto'},
                                 sort_action='native',
                                 filter_action='native',
-                                tooltip_data=[
-                                    {
-                                        column: {'value': str(value), 'type': 'markdown'}
-                                        for column, value in row.items()
-                                    } for row in table4.to_dict('records')
-                                ],
-                                tooltip_duration=None,
+                                # tooltip_data=[
+                                #     {
+                                #         column: {'value': str(value), 'type': 'markdown'}
+                                #         for column, value in row.items()
+                                #     } for row in table4.to_dict('records')
+                                # ],
+                                # tooltip_duration=None,
                                 css=[{
                                 'selector': '.dash-spreadsheet tr .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner tr',
                                 'rule': 'height: 10px; min-height: 10px;'
@@ -410,7 +419,7 @@ fourthCard = dbc.Card(dbc.CardBody([
                 html.H6("Table for filtering jobs by keywords", style={'text-align': 'center'}),
 
                 table4_layout,
-                
+
                 HDW_radio_button('table4'),
 
                 html.Div(dcc.Slider(min=1,max=24,step=None,
@@ -501,7 +510,10 @@ order by hour desc;
 """
 cur.execute(query5)
 data5 = cur.fetch_pandas_all().apply(pd.to_numeric) 
-chart5 = px.line(data5,x=data5['HOUR'],y=data5['NUMBEROFJOBS'])
+chart5 = px.line(data5,x=data5['HOUR'],y=data5['NUMBEROFJOBS'], template='none').update_layout(
+    xaxis_title="Time of Day", yaxis_title="No. of Jobs Posted", font_color="#6DFFA0",
+    font_family="Times New Roman",paper_bgcolor='#252B34',
+    plot_bgcolor='#252B34',).update_traces(marker_color='#6DFFA0').update_traces(line_color='#6DFFA0', line_width=5)
 chart5_layout = dcc.Graph(id='JvsT',figure=chart5)
 fifthCard = dbc.Card(dbc.CardBody([
                         html.H6("No. of Jobs posted v.s. Time", style={'text-align': 'center'}),
@@ -509,11 +521,11 @@ fifthCard = dbc.Card(dbc.CardBody([
                         html.Div(
                         dcc.RadioItems([
                         {
-                         'label':html.Div(['Time of Day'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+                         'label':html.Div(['Time of Day'],style={'padding':'0px 20px 10px', 'margin-top':'-5px', 'color':'#8DC6FF'}),
                          'value':'hour',
                         },
                         {
-                         'label':html.Div(['Day of the Week'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+                         'label':html.Div(['Day of the Week'],style={'padding':'0px 20px 10px', 'margin-top':'-5px', 'color':'#8DC6FF'}),
                          'value':'dayofweek',
                         },
 
@@ -551,7 +563,10 @@ def update_chart5(timeline_type):
     """
     cur.execute(query5)
     data5 = cur.fetch_pandas_all() 
-    chart5 = px.line(data5,x=data5[timeline_type.upper()],y=data5['NUMBEROFJOBS'])
+    chart5 = px.line(data5,x=data5[timeline_type.upper()],y=data5['NUMBEROFJOBS'],template='none').update_layout(
+    xaxis_title="Time of Day", yaxis_title="No. of Jobs Posted", font_color="#6DFFA0",
+    font_family="Times New Roman",paper_bgcolor='#252B34',
+    plot_bgcolor='#252B34',).update_traces(line_color='#6DFFA0', line_width=5)
     return chart5
 
 
@@ -579,9 +594,16 @@ def update_chart5(timeline_type):
 data6 = df.iloc[:,]
 fig = px.line(df, x="lifeExp", y="gdpPercap", color="country", text="year")"""
 
+zerothDiv = html.Div([
+    ])
+
 # ------------------------------------------------------------------------------
 # App layout
 app.layout = html.Div([
+
+            html.H1("Linkedin Job Tracker", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
+            html.H3('',style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
+
 
             dbc.Row([
                 dbc.Col(html.Div(firstCard), width=True),
@@ -594,8 +616,13 @@ app.layout = html.Div([
             dbc.Row([
                 dbc.Col(fourthCard, width=True),
                 dbc.Col(fifthCard,width=True),
-                ],), 
-            ])
+                ],),
+
+            ],
+            # style={
+            # 'backgroundColor':'blue'
+            # } 
+            )
 
 # ------------------------------------------------------------------------------
 # Connect the Plotly graphs with Dash Components
@@ -628,13 +655,11 @@ def update_chart2(time_range_slider_value, time_range_type):
     data2 = cur.fetch_pandas_all().apply(pd.to_numeric)
     data2.columns = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
     data2 = data2.sum()
-    chart2 = px.bar(data2, x=data2.index, y=data2,
-                    labels={
-                         "data2.index": "Years of Experience Required",
-                         "data2": "No. of Jobs",
-                     },
-                    #template="simple_white"
-                    )
+    chart2 = px.bar(data2, x=data2.index, y=data2, template='simple_white'
+                    ).update_layout(
+    xaxis_title="Years of Experience Required", yaxis_title="No. of Jobs",font_color="#6DFFA0",
+    font_family="Times New Roman",paper_bgcolor='#252B34',
+    plot_bgcolor='#252B34',).update_traces(marker_color='#6DFFA0')
     
     return chart2
 
