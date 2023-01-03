@@ -1,40 +1,3 @@
-"""  
-#? Sort by:
-dcc.Dropdown(
-id ='keyword_filter',
-options = {
-    'APPSPERHOUR':'Fastest Growing',
-    'NOAPPLICANTS':'No. of Applicants',
-    'POSTEDTIMEAGO':'YoE'
-},
-value='none'
-),"""
-
-
-"""
-#? Filter by keywords:
-dcc.Dropdown(
-id ='keyword_filter',
-options = {
-    'noApplicants':'No.Of Apps',
-    'TimePosted':'TimePosted',
-    'YoE':'YoE'
-},
-value='none'
-),
-
-
-#? Time Posted:
-dcc.Dropdown(
-id ='keyword_filter',
-options = {
-    'noApplicants':'No.Of Apps',
-    'TimePosted':'TimePosted',
-    'YoE':'YoE'
-},
-value='none'
-),"""
-
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -42,8 +5,7 @@ from dash import Dash, dcc, html, Input, Output, dash_table
 import os
 import snowflake.connector
 import dash_bootstrap_components as dbc
-
-
+from num2words import num2words
 
 
 
@@ -54,10 +16,6 @@ def get_snowflake_connector():
     os.environ['SNOW_WH']='AIRFLOW_ELT_WH'
     os.environ['SNOW_DB']='AIRFLOW_ELT_DB'
     os.environ['SNOW_SCH']='AIRFLOW_ELT_SCHEMA'
-
-    
-
-
 
     con = snowflake.connector.connect(
     user=os.getenv('SNOW_USER'),
@@ -70,8 +28,6 @@ def get_snowflake_connector():
     # IDK y but snowflake makes me choose a schema before i can do anything
     con.cursor().execute("USE SCHEMA AIRFLOW_ELT_SCHEMA")
     return con
-
-
 
 
 
@@ -96,7 +52,6 @@ application = app.server
 
 
 
-
 #TODO 1. New Postings in the last hour, table [col: title(with link), year(filter & sort), keywords(filter)] 
 query1= '''
 with unique_postings as (
@@ -109,8 +64,10 @@ with unique_postings as (
     NOAPPLICANTS,
     JOB_LINK,
     COMPANY
+
 FROM unique_postings
-WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp);
+WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp)
+Order by SNOW_COL_TIMESTAMP desc;
 '''
 cur.execute(query1)
 table1 = cur.fetch_pandas_all()
@@ -119,21 +76,48 @@ for i in range(table1.shape[0]):
 table1['NOAPPLICANTS'] = table1['NOAPPLICANTS'].astype(int)
 table1 = table1.drop(columns=["JOB_LINK"])  
 
-table1_layout= dash_table.DataTable(
-    style_cell={'whiteSpace': 'normal',
-                'height': 'auto',
-                'textAlign': 'center',
-                 'lineHeight': '15px'},
+table1_layout=dash_table.DataTable(
+    id='table1',
     data=table1.to_dict('records'),
     columns=[{'id': x, 'name': x, 'presentation': 'markdown'} if x == 'TITLE' else {'id': x, 'name': x} for x in table1.columns],
-    style_as_list_view=True,
+    style_cell={
+        'whiteSpace': 'normal',
+        'height': 'auto',
+        'textAlign': 'center',
+        'lineHeight': '15px'
+        },
+    style_as_list_view = True,
     style_table={'height': '475px', 'overflowY': 'auto'},
     sort_action='native',
     )
 
-firstCard  = dbc.Card(dbc.CardBody(table1_layout))
+firstCard  = dbc.Card(dbc.CardBody([
+                html.H6("New Jobs in last 5 hrs: ", style={'text-align': 'center'}),
+                html.P("Quick filter by experience using the bars in the Demand for Years of Experience chart"),
+                html.Div(id='YoE-Print', style={'text-align': 'center'}),
+                table1_layout]))
 
 
+def HDW_radio_button(chartName):
+    return html.Div(
+        dcc.RadioItems([
+        {
+         'label':html.Div(['Hours ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+         'value':'hour',
+        },
+        {
+         'label':html.Div(['Days ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+         'value':'day',
+        },
+        {
+         'label':html.Div(['Weeks ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+         'value':'week',
+        }
+
+        ], value='hour',
+        id='{}-time-range-type'.format(chartName),
+        inline=True)
+    , style={'padding': '0px 20px 20px 0px'})
 
 #TODO 2. Years of Exp Required
     #? clicking on smth here will send it as an input to The Table
@@ -160,7 +144,11 @@ chart2 = px.bar(data2, x=data2.index, y=data2,
                 )
 chart2_layout= dcc.Graph(id='YoE',figure=chart2)
 secondCard  = dbc.Card(dbc.CardBody([
+
+
                         html.H6("Demand for Years of Experience", style={'text-align': 'center'}),
+
+
                         html.Div(
                             dcc.RadioItems([
                             {
@@ -175,33 +163,63 @@ secondCard  = dbc.Card(dbc.CardBody([
                              'label':html.Div(['Weeks ago'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
                              'value':'week',
                             }
-
                             ], value='hour',
                             id='chart2-time-range-type',
                             inline=True)
                         , style={'padding': '0px 20px 20px 0px'}),
                         
+
                         html.Div([chart2_layout,],style={
                             'margin-top':'-30px',
                             'padding-top':'0px'}),
+
+
                         html.Div(dcc.Slider(min=1,max=24,step=None,
                             marks = {i:'{}'.format(i) for i in range(1,25)},
                             value=5,
                             id='chart2-time-range-slider',
                             ), style={ 'padding': '0px 20px 20px 20px',  #'width': '49%',
                                     }),
+
                         html.Div(id='my-output'),
-                        html.Div(id='YoE-Print'),
 
                             ]))
+
+
 @app.callback(
-    Output('my-output', 'children'),
-    Input('chart2-time-range-slider', 'value')
-)
-def update_output_div(chart2_time_range_value):
-    return f'Output: {chart2_time_range_value}'
+    [Output('table1','data'),
+    Output('YoE-Print','children')],
+    Input('YoE','clickData')
+    )
 
+def update_table1_from_chart2(clickData):
+    query1= '''
+    with unique_postings as (
+        SELECT *
+            from job_postings
+            WHERE {} = 1
+            qualify row_number() over(partition by job_id order by one) = 1
+        )
+        select
+        TITLE,
+        NOAPPLICANTS,
+        JOB_LINK,
+        COMPANY
+    FROM unique_postings
+    WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp)
+    Order by SNOW_COL_TIMESTAMP desc;
+    '''.format( num2words(clickData['points'][0]['x']) )
+    cur.execute(query1)
+    table1 = cur.fetch_pandas_all()
+    for i in range(table1.shape[0]):
+        table1.TITLE[i]  = "["+table1.TITLE[i]+"]("+table1.JOB_LINK[i]+")"
+    table1['NOAPPLICANTS'] = table1['NOAPPLICANTS'].astype(int)
+    table1 = table1.drop(columns=["JOB_LINK"]) 
 
+    YoEfilterLabel = 'Jobs requiring {} years of experience'.format(clickData['points'][0]['x'])
+        
+
+    return table1.to_dict('records'),YoEfilterLabel
 
 #TODO 3. SQL/ keywords histogram histogram, buttons/slider for time-line 
     #? clicking on smth here will send it as an input to The Table
@@ -229,28 +247,110 @@ chart3 = px.bar(data3, x=data3.index, y=data3,
         )
 chart3_layout = dcc.Graph(id='skills',figure=chart3)
 thirdCard = dbc.Card(dbc.CardBody([
-            dcc.RadioItems(
-            ['Hours', 'Days'],
-            'Hours',
-            id='chart3-time-range-type',
-            labelStyle={'display': 'inline-block', 'marginTop': '5px'}
-            ),
             html.H6("Skills/Tools Required", style={'text-align': 'center'}),
-            chart3_layout,
+
+            HDW_radio_button('chart3'),
+
+            html.Div(chart3_layout, style={
+                            'margin-top':'-30px',
+                            'padding-top':'0px'}),
+
             html.Div(dcc.Slider(min=1,max=24,step=None,
-                #id='chart2-time-range-slider',
-                value=5,
-                marks={
-                1:'1 hr',
-                2:'2 hrs ago',
-                3:'3 hrs ago',
-                5:'5 hrs ago',
-                10:'10 hrs ago',
-                24:'24 hrs ago'
-                }
-                ), style={ 'padding': '0px 20px 20px 20px',  #'width': '49%',
-                        })
+                            marks = {i:'{}'.format(i) for i in range(1,25)},
+                            value=5,
+                            id='chart3-time-range-slider',
+                            ), style={ 'padding': '0px 20px 20px 20px',  #'width': '49%',
+                                    }),
             ]))
+
+# @app.callback(
+#     [Output('table1','data'),
+#     Output('skills-Print','children')],
+#     Input('skills','clickData')
+#     )
+
+# def update_table1_from_chart3(clickData):
+#     query3= '''
+#     with unique_postings as (
+#         SELECT *
+#             from job_postings
+#             WHERE {} = 1
+#             qualify row_number() over(partition by job_id order by one) = 1
+#         )
+#         select
+#         TITLE,
+#         NOAPPLICANTS,
+#         JOB_LINK,
+#         COMPANY
+#     FROM unique_postings
+#     WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp)
+#     Order by SNOW_COL_TIMESTAMP desc;
+#     '''.format( num2words(clickData['points'][0]['x']) )
+#     cur.execute(query3)
+#     table1 = cur.fetch_pandas_all()
+#     for i in range(table1.shape[0]):
+#         table1.TITLE[i]  = "["+table1.TITLE[i]+"]("+table1.JOB_LINK[i]+")"
+#     table1['NOAPPLICANTS'] = table1['NOAPPLICANTS'].astype(int)
+#     table1 = table1.drop(columns=["JOB_LINK"]) 
+
+#     skillsfilterLabel = 'Jobs requiring {}'.format(clickData['points'][0]['x'])
+        
+
+#     return table1.to_dict('records'),skillsfilterLabel
+
+
+@app.callback(
+     Output('skills', 'figure'),
+     [Input('chart3-time-range-slider','value'),
+      Input('chart3-time-range-type','value'),
+      ])
+
+def update_chart3(time_range_slider_value, time_range_type):
+    if time_range_type == 'hour':
+        dateAdd_Step = -time_range_slider_value + 3
+    else:
+        dateAdd_Step = -time_range_slider_value
+    query3= '''
+    with unique_postings as (
+        SELECT *
+            from job_postings
+            qualify row_number() over(partition by job_id order by one) = 1
+        )
+        select
+        SQL,
+        PYTHON,
+        AIRFLOW,SNOWFLAKE,BIGQUERY,DBT,GCP
+        FROM unique_postings
+        WHERE SNOW_COL_TIMESTAMP >= dateadd({0},{1},current_timestamp);
+        '''.format(time_range_type,dateAdd_Step)
+    cur.execute(query3)
+    data3 = cur.fetch_pandas_all().apply(pd.to_numeric).sum()
+    chart3 = px.bar(data3, x=data3.index, y=data3,
+    #template="simple_white"
+    )
+    return chart3
+
+@app.callback(
+    [Output('chart3-time-range-slider','marks'),
+    Output('chart3-time-range-slider','max')],
+    Input('chart3-time-range-type','value'),)
+
+def update_chart3_slider(chart3_time_range_type):
+    if chart3_time_range_type == 'hour':
+        marks={i:'{}'.format(i) for i in range(1,25)}
+        max = 24
+    else: 
+        if chart3_time_range_type == 'day':
+            marks={i:'{}'.format(i) for i in range(1,8)}
+            max = 7
+
+        else:
+            if chart3_time_range_type == 'week':
+                marks={i:'{}'.format(i) for i in range(1,5)}
+                max = 4
+
+    return marks,max
+
 
 
 
@@ -265,7 +365,8 @@ SELECT
     TITLE,
     NOAPPLICANTS,
     COMPANY,
-    JOB_LINK
+    JOB_LINK,
+    description
 FROM unique_postings
 WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp);
 '''
@@ -278,22 +379,184 @@ table4=table4.drop(columns=['JOB_LINK'])
 table4['NOAPPLICANTS'] = table4['NOAPPLICANTS'].astype(int)
 table4 = table4.rename(columns={'TITLE': 'Title', 'NOAPPLICANTS': 'No. of Applications', 'COMPANY':'Company'})
 table4_layout = dash_table.DataTable(
-                                style_cell={'whiteSpace': 'normal','height': 'auto','textAlign': 'center',},
+                                id='filteringTable',
+                                style_cell={'whiteSpace': 'normal','height': 'auto',
+                                            'minWidth': '180px', 'width': '180px', 'maxWidth': '180px',
+                                            'minHeight':'50px','height':'50px','maxHeight':'50px',
+                                            'textAlign': 'left','lineHeight': '15px',
+                                            'overflow': 'hidden',
+                                            'textOverflow': 'ellipsis',
+                                            'maxWidth': 0},
                                 data=table4.to_dict('records'),
                                 columns=[{'id': x, 'name': x, 'presentation': 'markdown'} if x == 'Title' else {'id': x, 'name': x} for x in table4.columns],
                                 style_as_list_view=True,
-                                style_table={'height': '300px', 'overflowY': 'auto'},
-                                    sort_action='native',
+                                style_table={'height': '600px', 'overflowY': 'auto', 'overflowX': 'auto'},
+                                sort_action='native',
                                 filter_action='native',
-
+                                tooltip_data=[
+                                    {
+                                        column: {'value': str(value), 'type': 'markdown'}
+                                        for column, value in row.items()
+                                    } for row in table4.to_dict('records')
+                                ],
+                                tooltip_duration=None,
+                                css=[{
+                                'selector': '.dash-spreadsheet tr .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner tr',
+                                'rule': 'height: 10px; min-height: 10px;'
+                                }],
 
                                 )
-fourthCard = table4_layout   
+fourthCard = dbc.Card(dbc.CardBody([
+                html.H6("Table for filtering jobs by keywords", style={'text-align': 'center'}),
 
-#TODO 4. Jobs Posted | No. of apps vs Time (24 Hours), T-s Chart [radio buttons: Time of Day, Week, Month,  JobsPosted and NoOfApps as two colors with legends]
+                table4_layout,
+                
+                HDW_radio_button('table4'),
+
+                html.Div(dcc.Slider(min=1,max=24,step=None,
+                            marks = {i:'{}'.format(i) for i in range(1,25)},
+                            value=5,
+                            id='table4-time-range-slider',
+                            ), style={ 'padding': '0px 20px 20px 20px',  #'width': '49%',
+                                    }),
+
+                
+                ])   )
+
+@app.callback(
+     Output('filteringTable', 'data'),
+     [Input('table4-time-range-slider','value'),
+      Input('table4-time-range-type','value'),
+      ])
+
+def update_chart3(time_range_slider_value, time_range_type):
+    if time_range_type == 'hour':
+        dateAdd_Step = -time_range_slider_value + 3
+    else:
+        dateAdd_Step = -time_range_slider_value
+    query4= '''
+    with unique_postings as (
+    SELECT *
+        from job_postings
+        qualify row_number() over(partition by job_id order by one) = 1
+    )
+    SELECT 
+        TITLE,
+        NOAPPLICANTS,
+        COMPANY,
+        JOB_LINK,
+        description
+    FROM unique_postings
+    WHERE SNOW_COL_TIMESTAMP >= dateadd({0},{1},current_timestamp);
+    '''.format(time_range_type,dateAdd_Step)
+    cur.execute(query4)
+    table4 = cur.fetch_pandas_all()
+    for i in range(table4.shape[0]):
+        table4.TITLE[i]  = " ".join(["[",table4.TITLE[i],"](",table4.JOB_LINK[i],")"])
+    table4=table4.drop(columns=['JOB_LINK'])
+    table4['NOAPPLICANTS'] = table4['NOAPPLICANTS'].astype(int)
+    table4 = table4.rename(columns={'TITLE': 'Title', 'NOAPPLICANTS': 'No. of Applications', 'COMPANY':'Company'})
+    return table4.to_dict('records')
+
+@app.callback(
+    [Output('table4-time-range-slider','marks'),
+    Output('table4-time-range-slider','max')],
+    Input('table4-time-range-type','value'),)
+
+def update_table4_slider(table4_time_range_type):
+    if table4_time_range_type == 'hour':
+        marks={i:'{}'.format(i) for i in range(1,25)}
+        max = 24
+    else: 
+        if table4_time_range_type == 'day':
+            marks={i:'{}'.format(i) for i in range(1,8)}
+            max = 7
+
+        else:
+            if table4_time_range_type == 'week':
+                marks={i:'{}'.format(i) for i in range(1,5)}
+                max = 4
+
+    return marks,max
 
 
-#TODO 5. No experiece | No experience & entry level postings vs Time, T-s, over the month
+
+#TODO 5. Jobs Posted | No. of apps vs Time (24 Hours), T-s Chart [radio buttons: Time of Day, Week, Month,  JobsPosted and NoOfApps as two colors with legends]
+
+query5="""
+with unique_postings as (
+    SELECT *
+        from job_postings
+        qualify row_number() over(partition by job_id order by one) = 1
+    )
+select
+    count(job_id) numberOfJobs,
+    hour --dayofweek,nameofmonth,dayofmonth
+from unique_postings
+where hour is not null
+AND SNOW_COL_TIMESTAMP >= dateadd(week,-1,current_timestamp)
+group by hour
+order by hour desc;
+
+"""
+cur.execute(query5)
+data5 = cur.fetch_pandas_all().apply(pd.to_numeric) 
+chart5 = px.line(data5,x=data5['HOUR'],y=data5['NUMBEROFJOBS'])
+chart5_layout = dcc.Graph(id='JvsT',figure=chart5)
+fifthCard = dbc.Card(dbc.CardBody([
+                        html.H6("No. of Jobs posted v.s. Time", style={'text-align': 'center'}),
+
+                        html.Div(
+                        dcc.RadioItems([
+                        {
+                         'label':html.Div(['Time of Day'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+                         'value':'hour',
+                        },
+                        {
+                         'label':html.Div(['Day of the Week'],style={'padding':'0px 20px 10px', 'margin-top':'-5px'}),
+                         'value':'dayofweek',
+                        },
+
+                        ], value='hour',
+                        id='chart5-timeline-type',
+                        inline=True)
+                        , style={'padding': '0px 20px 20px 0px'}),
+
+                        html.Div(chart5_layout, style={
+                            'margin-top':'-30px',
+                            'padding-top':'0px'}),
+
+                    ]))
+
+@app.callback(
+    Output('JvsT','figure'),
+    Input('chart5-timeline-type','value'))
+
+def update_chart5(timeline_type):
+    query5= f"""
+    with unique_postings as (
+        SELECT *
+            from job_postings
+            qualify row_number() over(partition by job_id order by one) = 1
+        )
+    select
+        count(job_id) numberOfJobs,
+        {timeline_type} --dayofweek,nameofmonth,dayofmonth
+    from unique_postings
+    where {timeline_type} is not null
+    AND SNOW_COL_TIMESTAMP >= dateadd(week,-1,current_timestamp)
+    group by {timeline_type}
+    order by {timeline_type} desc;
+
+    """
+    cur.execute(query5)
+    data5 = cur.fetch_pandas_all() 
+    chart5 = px.line(data5,x=data5[timeline_type.upper()],y=data5['NUMBEROFJOBS'])
+    return chart5
+
+
+
+#TODO 6. No experiece | No experience & entry level postings vs Time, T-s, over the month
 
 #TODO 7. Scatter Plot: Software Eng. sector as color, no. of applicants as size, keywords as marks, number of jobs on y, something on x, [Time slider for subsetting]
 
@@ -328,8 +591,10 @@ app.layout = html.Div([
             
             html.Br(),
             
-            dbc.Row(
-                dbc.Col(fourthCard, width=True)), 
+            dbc.Row([
+                dbc.Col(fourthCard, width=True),
+                dbc.Col(fifthCard,width=True),
+                ],), 
             ])
 
 # ------------------------------------------------------------------------------
@@ -339,7 +604,7 @@ app.layout = html.Div([
 
 
 @app.callback(
-     [Output('YoE', 'figure'),Output('YoE-Print', 'children')],
+     Output('YoE', 'figure'),
      [Input('chart2-time-range-slider','value'),
       Input('chart2-time-range-type','value'),
       ])
@@ -371,7 +636,7 @@ def update_chart2(time_range_slider_value, time_range_type):
                     #template="simple_white"
                     )
     
-    return chart2, query2
+    return chart2
 
 @app.callback(
     [Output('chart2-time-range-slider','marks'),
