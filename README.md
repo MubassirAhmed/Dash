@@ -8,9 +8,7 @@ It filters and tags jobs based on the years of experience (YoE) mentioned in the
 
 This in particular, solves a real-world issue, as many postings tagged as entry-level jobs on Linkedin ask for several YoE, and it's not possible to filter them using Linkedin's search. During the search process, sorting through entry-level roles manually becomes extremely time consuming, especially when hundreds of new jobs are posted everyday, making it impractical to go through all of them. 
 
-On the flip side, there are also many jobs that do not explicitly mention any specific YoE requirements, but again, it's search these using Linkedin's standard search. This app tags such jobs with a '0' YoE requirment and helps to search for such jobs.
-
-The app also creates other visualizations from the datawarehouse views and tables to illustrate useful insights such as:
+The app also creates other useful visualizations such as:
 
 * Technical skills that are currently most in demand
 * The demand for years of experience
@@ -24,10 +22,10 @@ The app also creates other visualizations from the datawarehouse views and table
 ![Alt Text](https://media.giphy.com/media/T5BTftQVy2sMqcaFF6/giphy.gif)
 
 3. The bar charts display aggregates, so the time range for aggregating can be changed with the slider and radio buttons.
-![Alt Text](https://media.giphy.com/media/ZHNF7pWf8732V9dpoM/giphy.gif)
+![Alt Text](https://media.giphy.com/media/ZjhLBSry5UfLPGoKfE/giphy.gif)
 
 4. You can filter results in the 2nd table using any keyword. This enables you to filter job titles, and search for keywords in job descriptions.
-![Alt Text](https://media.giphy.com/media/ZHNF7pWf8732V9dpoM/giphy.gif)
+![Alt Text](https://media.giphy.com/media/RWo6c6dOWt7W2HJiYd/giphy.gif)
 
 
 ### The app can be run locally like this:
@@ -35,7 +33,6 @@ The app is currently deployed at dashboard.renderme with CI/CD, and will later b
 
 
 ### Known issues
-* App is slow due to free tier server hosting (with 512 MB RAM). Will migrate to VM instance with more RAM on GCP
 * Filter input box is difficult to see, needs the CSS color changed
 * Cards are not spaced out properly in smaller screens. Need to add padding in CSS
 * Row height in second table needs to be fixed, currently they take up the full space necessary for displaying entire job descriptions
