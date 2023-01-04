@@ -53,7 +53,7 @@ cur =  con.cursor()
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-server = app.server
+application = app.server
 
 
 
@@ -604,19 +604,21 @@ app.layout = html.Div([
             dbc.Row([
                 dbc.Col([html.Div([
                     html.H1("Linkedin Job Tracker", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
-                    html.H3("This app is built on top of an ELT pipeline, with Python, Dash, SQL, Pandas and CSS. It queries data from a Snowflake warehouse", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),],
+                    html.H3("This app is built on top of an ELT pipeline, with Python, Dash, SQL, Pandas and CSS. It queries data from the Snowflake warehouse.", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),],
                      )],width=8),
 
-                dbc.Col(html.A(
+                dbc.Col(html.Div([html.A(
                     href="https://github.com/MubassirAhmed/Dash",
                     children=[
                         html.Img(
                             alt="Link to my twitter",
                             src="assets/GitHub_Logo.png",
-                            style={'float':'right', 'padding-right':'20px'}
-                        )
-                    ]
-                    ), width=4)
+                            style={'float':'right', 'padding-right':'30px'}
+                        ),
+                        ]
+                    ),
+                    html.H6("Checkout the github repo :)")
+                    ],style={'display':'inline-block', 'float':'right', 'padding-right':'10px'}), width=4)
             ]),
 
             
