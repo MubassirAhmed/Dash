@@ -2,7 +2,7 @@
 
 ## An [interactive dashboard](https://easy-bottles-grin-34-125-254-54.loca.lt) built with Python and Dash that mines scraped data from Linkedin 
 
-This app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline), showcasing an example end-user data product built from the fact and dimension tables created previously in a snowflake data warehouse. 
+This app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline) to showcase an example end-user data product. 
 
 It filters and tags jobs based on the years of experience (YoE) mentioned in the job descriptions. This gives a more concrete way of searching for jobs as Linkedin uses arbitrary tags such as 'entry-level', 'associate', 'mid-senior level', etc. to organize their job postings.
 
@@ -35,9 +35,11 @@ The app also creates other useful visualizations such as:
 ### To install and run locally:
 1. Install Python 3
 2. run the following command in your terminal to install the app:
-`git clone https://github.com/MubassirAhmed/Dash.git && cd Dash && pip3 install -r requirements.txt ` 
+
+	>`git clone https://github.com/MubassirAhmed/Dash.git && cd Dash && pip3 install -r requirements.txt ` 
 3.Run the following to start the app:
-`python3 DashJobsAnalysis.py`app can be run locally like this:
+
+	`python3 DashJobsAnalysis.py`app can be run locally like this:
 
 
 ### Known issues
