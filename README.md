@@ -23,13 +23,13 @@ The app also creates other useful visualizations such as:
 
 ![Alt Text](https://media.giphy.com/media/T5BTftQVy2sMqcaFF6/giphy.gif)
 
-3. You can filter results in the 2nd table using any keyword. This enables you to filter job titles, and search for keywords in job descriptions.
-
-![Alt Text](https://media.giphy.com/media/RWo6c6dOWt7W2HJiYd/giphy.gif)
-
-4. The bar charts display aggregates, so the time range for aggregating can be changed with the slider and radio buttons.
+3. The bar charts display aggregates, so the time range for aggregating can be changed with the slider and radio buttons.
 
 ![Alt Text](https://media.giphy.com/media/ZjhLBSry5UfLPGoKfE/giphy.gif)
+
+4. You can filter results in the 2nd table using any keyword. This enables you to filter job titles, and search for keywords in job descriptions.
+
+![Alt Text](https://media.giphy.com/media/RWo6c6dOWt7W2HJiYd/giphy.gif)
 
 
 ### To install and run locally on Unix systems:
