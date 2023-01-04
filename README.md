@@ -48,6 +48,7 @@ python3 DashJobsAnalysis.py
 
 
 ### Known issues
+* The app is only accessible through a tunnel and not made public as of yet and so a warning will be displayed when first accessing the app with the link.
 * Cards are not spaced out properly in smaller screens. Need to add padding in CSS
 * Row height in second table needs to be fixed, currently they take up the full space necessary for displaying entire job descriptions
 * Filter input box is difficult to see, needs the CSS color changed
