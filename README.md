@@ -36,7 +36,7 @@ The app also creates other useful visualizations such as:
 1. Install Python 3
 2. run the following command in your terminal to install the app:
 
-	```git clone https://github.com/MubassirAhmed/Dash.git && cd Dash && pip3 install -r requirements.txt ```
+```git clone https://github.com/MubassirAhmed/Dash.git && cd Dash && pip3 install -r requirements.txt```
 
 3.Run the following to start the app:
 
