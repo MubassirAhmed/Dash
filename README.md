@@ -1,6 +1,6 @@
-# Dashboard for analyzing Linkedin jobs
+# [Dashboard for analyzing Linkedin jobs](https://easy-bottles-grin-34-125-254-54.loca.lt)
 
-## An interactive dashboard, mining scraped data from linked, built with Python and Dash
+## An [interactive dashboard](https://easy-bottles-grin-34-125-254-54.loca.lt), mining scraped data from linked, built with Python and Dash
 
 This app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline), showcasing an example end-user product built from the fact and dimension tables created previously in the snowflake warehouse. 
 
