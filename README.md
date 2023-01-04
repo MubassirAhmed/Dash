@@ -23,23 +23,24 @@ The app also creates other useful visualizations such as:
 
 ![Alt Text](https://media.giphy.com/media/T5BTftQVy2sMqcaFF6/giphy.gif)
 
-3. The bar charts display aggregates, so the time range for aggregating can be changed with the slider and radio buttons.
-
-![Alt Text](https://media.giphy.com/media/ZjhLBSry5UfLPGoKfE/giphy.gif)
-
-4. You can filter results in the 2nd table using any keyword. This enables you to filter job titles, and search for keywords in job descriptions.
+3. You can filter results in the 2nd table using any keyword. This enables you to filter job titles, and search for keywords in job descriptions.
 
 ![Alt Text](https://media.giphy.com/media/RWo6c6dOWt7W2HJiYd/giphy.gif)
 
+4. The bar charts display aggregates, so the time range for aggregating can be changed with the slider and radio buttons.
 
-### To install and run locally:
+![Alt Text](https://media.giphy.com/media/ZjhLBSry5UfLPGoKfE/giphy.gif)
+
+
+### To install and run locally on Unix systems:
 1. Install Python 3
 2. run the following command in your terminal to install the app:
 
-	>`git clone https://github.com/MubassirAhmed/Dash.git && cd Dash && pip3 install -r requirements.txt ` 
+	```git clone https://github.com/MubassirAhmed/Dash.git && cd Dash && pip3 install -r requirements.txt ```
+
 3.Run the following to start the app:
 
-	`python3 DashJobsAnalysis.py`app can be run locally like this:
+	```python3 DashJobsAnalysis.py```
 
 
 ### Known issues
