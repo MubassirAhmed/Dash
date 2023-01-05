@@ -411,8 +411,13 @@ table4_layout = dash_table.DataTable(
                                 # ],
                                 # tooltip_duration=None,
                                 css=[{
-                                'selector': '.dash-spreadsheet tr .dash-table-container .dash-spreadsheet-container .dash-spreadsheet-inner tr',
-                                'rule': 'height: 10px; min-height: 10px;'
+                                    'selector': '.dash-spreadsheet td div',
+                                    'rule': '''
+                                        line-height: 15px;
+                                        max-height: 30px; min-height: 30px; height: 30px;
+                                        display: block;
+                                        overflow-y: hidden;
+                                    '''
                                 }],
 
                                 )
@@ -437,17 +442,24 @@ fourthCard = dbc.Card(dbc.CardBody([
      Output('filteringTable', 'data'),
      [Input('table4-time-range-slider','value'),
       Input('table4-time-range-type','value'),
+      Input('YoE','clickData')
       ])
 
-def update_chart3(time_range_slider_value, time_range_type):
+def update_table4(time_range_slider_value, time_range_type,clickData):
     if time_range_type == 'hour':
         dateAdd_Step = -time_range_slider_value + 3
     else:
         dateAdd_Step = -time_range_slider_value
-    query4= '''
+
+
+    query4_part1= '''
     with unique_postings as (
     SELECT *
         from job_postings
+
+    '''
+
+    query4_part2 = '''
         qualify row_number() over(partition by job_id order by one) = 1
     )
     SELECT 
@@ -457,8 +469,20 @@ def update_chart3(time_range_slider_value, time_range_type):
         JOB_LINK,
         description
     FROM unique_postings
-    WHERE SNOW_COL_TIMESTAMP >= dateadd({0},{1},current_timestamp);
-    '''.format(time_range_type,dateAdd_Step)
+    WHERE SNOW_COL_TIMESTAMP >= dateadd({},{},current_timestamp)
+    Order by SNOW_COL_TIMESTAMP desc;;
+    '''
+
+
+    if clickData['points'][0]['x'] is None:
+        query4 = query4_part1 + \
+                 query4_part2.format(time_range_type, dateAdd_Step)
+    else:
+        query4 = query4_part1 + \
+                 'WHERE {} = 1'.format(num2words(clickData['points'][0]['x'])) +  \
+                 query4_part2.format(time_range_type, dateAdd_Step)
+
+
     cur.execute(query4)
     table4 = cur.fetch_pandas_all()
     for i in range(table4.shape[0]):
