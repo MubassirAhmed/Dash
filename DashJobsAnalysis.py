@@ -292,10 +292,9 @@ thirdCard = dbc.Card(dbc.CardBody([
 #         JOB_LINK,
 #         COMPANY
 #     FROM unique_postings
-#     WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,
+#     WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,)
 
 
-)
 #     Order by SNOW_COL_TIMESTAMP desc;
 #     '''.format( num2words(clickData['points'][0]['x']) )
 #     cur.execute(query3)
