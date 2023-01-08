@@ -73,7 +73,8 @@ with unique_postings as (
     COMPANY
 
 FROM unique_postings
-WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp)
+WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp
+)
 Order by SNOW_COL_TIMESTAMP desc;
 '''
 cur.execute(query1)
@@ -137,7 +138,7 @@ with unique_postings as (
     )
 SELECT ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN, FIFTEEN
 FROM unique_postings
-WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp);
+WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp);
 '''
 cur.execute(query2)
 data2 = cur.fetch_pandas_all().apply(pd.to_numeric)
@@ -212,7 +213,7 @@ def update_table1_from_chart2(clickData):
         JOB_LINK,
         COMPANY
     FROM unique_postings
-    WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp)
+    WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp)
     Order by SNOW_COL_TIMESTAMP desc;
     '''.format( num2words(clickData['points'][0]['x']) )
     cur.execute(query1)
@@ -244,7 +245,7 @@ SELECT
     PYTHON,
     AIRFLOW,SNOWFLAKE,BIGQUERY,DBT,GCP
 FROM unique_postings
-WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp);
+WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp);
 '''
 cur.execute(query3)
 data3 = cur.fetch_pandas_all().apply(pd.to_numeric).sum()
@@ -291,7 +292,10 @@ thirdCard = dbc.Card(dbc.CardBody([
 #         JOB_LINK,
 #         COMPANY
 #     FROM unique_postings
-#     WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp)
+#     WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,
+
+
+)
 #     Order by SNOW_COL_TIMESTAMP desc;
 #     '''.format( num2words(clickData['points'][0]['x']) )
 #     cur.execute(query3)
@@ -329,7 +333,7 @@ def update_chart3(time_range_slider_value, time_range_type):
         PYTHON,
         AIRFLOW,SNOWFLAKE,BIGQUERY,DBT,GCP
         FROM unique_postings
-        WHERE SNOW_COL_TIMESTAMP >= dateadd({0},{1},current_timestamp);
+        WHERE SNOW_COL_TIMESTAMP >= dateadd({0},{1},'2023-01-06 20:12:02'::timestamp);
         '''.format(time_range_type,dateAdd_Step)
     cur.execute(query3)
     data3 = cur.fetch_pandas_all().apply(pd.to_numeric).sum()
@@ -378,7 +382,7 @@ SELECT
     JOB_LINK,
     description
 FROM unique_postings
-WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,current_timestamp);
+WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp);
 '''
 cur.execute(query4)
 table4 = cur.fetch_pandas_all()
@@ -469,7 +473,7 @@ def update_table4(time_range_slider_value, time_range_type,clickData):
         JOB_LINK,
         description
     FROM unique_postings
-    WHERE SNOW_COL_TIMESTAMP >= dateadd({},{},current_timestamp)
+    WHERE SNOW_COL_TIMESTAMP >= dateadd({},{},'2023-01-06 20:12:02'::timestamp)
     Order by SNOW_COL_TIMESTAMP desc;;
     '''
 
@@ -528,7 +532,7 @@ select
     hour --dayofweek,nameofmonth,dayofmonth
 from unique_postings
 where hour is not null
-AND SNOW_COL_TIMESTAMP >= dateadd(week,-1,current_timestamp)
+AND SNOW_COL_TIMESTAMP >= dateadd(week,-1,'2023-01-06 20:12:02'::timestamp)
 group by hour
 order by hour desc;
 
@@ -581,7 +585,7 @@ def update_chart5(timeline_type):
         {timeline_type} --dayofweek,nameofmonth,dayofmonth
     from unique_postings
     where {timeline_type} is not null
-    AND SNOW_COL_TIMESTAMP >= dateadd(week,-1,current_timestamp)
+    AND SNOW_COL_TIMESTAMP >= dateadd(week,-1,'2023-01-06 20:12:02'::timestamp)
     group by {timeline_type}
     order by {timeline_type} desc;
 
@@ -693,7 +697,7 @@ def update_chart2(time_range_slider_value, time_range_type):
         )
         SELECT ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN, FIFTEEN
         FROM unique_postings
-        WHERE SNOW_COL_TIMESTAMP >= dateadd({0},{1},current_timestamp);
+        WHERE SNOW_COL_TIMESTAMP >= dateadd({0},{1},'2023-01-06 20:12:02'::timestamp);
         '''.format(time_range_type,dateAdd_Step)
     cur.execute(query2)
     data2 = cur.fetch_pandas_all().apply(pd.to_numeric)
