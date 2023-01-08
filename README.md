@@ -1,6 +1,6 @@
-# [Linkedin Jobs Analysis Dashboard](https://easy-bottles-grin-34-125-254-54.loca.lt)
+# [Linkedin Jobs Analysis Dashboard](https://linkedin-job-tracker.onrender.com)
 
-## An [interactive dashboard](https://easy-bottles-grin-34-125-254-54.loca.lt) built with Python and Dash that mines scraped data from Linkedin 
+## An [interactive dashboard](https://linkedin-job-tracker.onrender.com) built with Python and Dash that mines scraped data from Linkedin 
 
 This app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline) to showcase an example end-user data product. 
 
