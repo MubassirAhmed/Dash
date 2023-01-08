@@ -53,7 +53,7 @@ cur =  con.cursor()
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-application = app.server
+server = app.server
 
 
 
