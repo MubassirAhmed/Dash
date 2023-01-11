@@ -631,9 +631,7 @@ app.layout = html.Div([
             dbc.Row([
                 dbc.Col([html.Div([
                     html.H1("Linkedin Job Tracker", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
-                    html.H3("This is a live flask app built on top of an ELT pipeline, built using Python, Dash, SQL, Pandas, React.js, CSS, & Bootstrap. It queries data from a Snowflake data warehouse.", 
-                          , style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),],
-                     )],width=8),
+                    html.H3("This is a live flask app built on top of an ELT pipeline, built using Python, Dash, SQL, Pandas, React.js, CSS, & Bootstrap. It queries data from a Snowflake data warehouse.", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),],)],width=8),
 
                 dbc.Col(html.Div([html.A(
                     href="https://github.com/MubassirAhmed/Dash",
