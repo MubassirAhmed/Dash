@@ -7,13 +7,7 @@ This app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/
 
 It filters and tags jobs based on the years of experience (YoE) mentioned in the job descriptions. This gives a more concrete way of searching for jobs as Linkedin uses arbitrary tags such as 'entry-level', 'associate', 'mid-senior level', etc. to organize their job postings.
 
-This in particular, solves a real-world issue, as many postings tagged as entry-level jobs on Linkedin ask for several YoE, and it's not possible to filter them using Linkedin's search. During the search process, sorting through entry-level roles manually becomes extremely time consuming, especially when hundreds of new jobs are posted everyday, making it impractical to go through all of them. 
-
-The app also creates other useful visualizations such as:
-
-* Technical skills that are currently most in demand
-* The demand for years of experience
-* Time of day, and day of the week when most number of jobs are posted
+This in particular, solves a real-world issue, as many postings tagged as entry-level jobs on Linkedin ask for several YoE, and it's not possible to filter them using Linkedin's search.
 
 ## How to use:
 1.The first table shows new jobs posted in the last 5 hours. The jobs can be sorted by their current number of applications received.
