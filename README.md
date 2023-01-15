@@ -2,6 +2,7 @@
 
 ## An [interactive dashboard](https://linkedin-job-tracker.onrender.com) built with Python and Dash that mines scraped data from Linkedin 
 
+## Outline
 This app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline) to showcase an example end-user data product. 
 
 It filters and tags jobs based on the years of experience (YoE) mentioned in the job descriptions. This gives a more concrete way of searching for jobs as Linkedin uses arbitrary tags such as 'entry-level', 'associate', 'mid-senior level', etc. to organize their job postings.
