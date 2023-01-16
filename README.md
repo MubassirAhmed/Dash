@@ -1,13 +1,11 @@
-# [Linkedin Jobs Analysis Dashboard](https://linkedin-job-tracker.onrender.com)
+# Linkedin Jobs Analysis Dashboard
 
-## An [interactive dashboard](https://linkedin-job-tracker.onrender.com) built with Python and Dash that mines scraped data from Linkedin 
+## An interactive dashboard that mines scraped data from Linkedin, [click here to view](https://linkedin-job-tracker.onrender.com). 
 
 ## Outline
-This app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline) to showcase an example end-user data product. 
+This python app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline) to showcase an example end-user data product. 
 
-It filters and tags jobs based on the years of experience (YoE) mentioned in the job descriptions. This gives a more concrete way of searching for jobs as Linkedin uses arbitrary tags such as 'entry-level', 'associate', 'mid-senior level', etc. to organize their job postings.
-
-This in particular, solves a real-world issue, as many postings tagged as entry-level jobs on Linkedin ask for several YoE, and it's not possible to filter them using Linkedin's search.
+It filters and tags jobs based on the years of experience (YoE) mentioned in the job descriptions. This gives a more concrete way of searching for jobs as Linkedin uses arbitrary tags such as 'entry-level', 'associate', 'mid-senior level', etc. for organizing their job postings.
 
 ## How to use:
 1.The first table shows new jobs posted in the last 5 hours. The jobs can be sorted by their current number of applications received.
