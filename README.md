@@ -5,6 +5,12 @@
 ## Outline
 This python app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline). It filters and tags jobs based on the years of experience (YoE) rather than the imprecise tags, such as 'entry-level', 'associate', etc. currently used by Linkedin.
 
+The app also creates other useful visualizations such as:
+
+* Technical skills that are currently most in demand
+* The demand for years of experience
+* Time of day, and day of the week when most number of jobs are posted
+
 ## How to use:
 1.The first table shows new jobs posted in the last 5 hours. The jobs can be sorted by their current number of applications received.
 
