@@ -1,6 +1,6 @@
 # Linkedin Jobs Analysis Dashboard
 
-### An interactive dashboard that mines scraped data from Linkedin, [click here to view](https://linkedin-job-tracker.onrender.com). 
+### An interactive dashboard that mines scraped data from Linkedin, [click here to view](https://linkedin-job-tracker.onrender.com) (takes some seconds to load). 
 
 ## Outline
 This python app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline). It filters and tags jobs based on the years of experience (YoE) rather than the imprecise tags, such as 'entry-level', 'associate', etc. currently used by Linkedin.
