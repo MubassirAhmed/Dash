@@ -1,6 +1,6 @@
 # Linkedin Jobs Analysis Dashboard
 
-### *An interactive dashboard that mines scraped data from Linkedin, [click here to view](https://linkedin-job-tracker.onrender.com).* 
+### An interactive dashboard that mines scraped data from Linkedin, [click here to view](https://linkedin-job-tracker.onrender.com). 
 
 ## Outline
 This python app is built as part of an [ELT pipeline](https://github.com/MubassirAhmed/ELT-Data-Pipeline) to showcase an example end-user data product. 
