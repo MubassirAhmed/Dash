@@ -16,9 +16,9 @@ white_button_style = {'background-color': 'white',
                       'margin-left': '50px'}
 
 def get_snowflake_connector():
-    os.environ['SNOW_USER']='mvbashxr'
+    os.environ['SNOW_USER']='mvbasxhr'
     os.environ['SNOW_PWD']='ReLife!23'
-    os.environ['SNOW_ACCOUNT']='ep66367.ca-central-1.aws'
+    os.environ['SNOW_ACCOUNT']='kl20451.ca-central-1.aws'
     os.environ['SNOW_WH']='AIRFLOW_ELT_WH'
     os.environ['SNOW_DB']='AIRFLOW_ELT_DB'
     os.environ['SNOW_SCH']='AIRFLOW_ELT_SCHEMA'
@@ -240,9 +240,8 @@ with unique_postings as (
         qualify row_number() over(partition by job_id order by one) = 1
     )
 SELECT 
-    SQL,
-    PYTHON,
-    AIRFLOW,SNOWFLAKE,BIGQUERY,DBT,GCP
+    ONE,
+    TWO
 FROM unique_postings
 WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp);
 '''
@@ -378,7 +377,8 @@ SELECT
     JOB_LINK,
     description
 FROM unique_postings
-WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp);
+WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp)
+    AND REMOVE_TITLES = 0;
 '''
 cur.execute(query4)
 table4 = cur.fetch_pandas_all()
