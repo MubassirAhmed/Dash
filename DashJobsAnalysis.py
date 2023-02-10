@@ -53,7 +53,7 @@ cur =  con.cursor()
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-application = app.server
+server = app.server
 
 
 
@@ -290,7 +290,9 @@ thirdCard = dbc.Card(dbc.CardBody([
 #         JOB_LINK,
 #         COMPANY
 #     FROM unique_postings
-#     WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,'2023-01-06 20:12:02'::timestamp)
+#     WHERE SNOW_COL_TIMESTAMP >= dateadd(hour,-2,)
+
+
 #     Order by SNOW_COL_TIMESTAMP desc;
 #     '''.format( num2words(clickData['points'][0]['x']) )
 #     cur.execute(query3)
@@ -628,8 +630,7 @@ app.layout = html.Div([
             dbc.Row([
                 dbc.Col([html.Div([
                     html.H1("Linkedin Job Tracker", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),
-                    html.H3("This app is built on top of an ELT pipeline, with Python, Dash, SQL, Pandas and CSS. It queries data from the Snowflake warehouse.", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),],
-                     )],width=8),
+                    html.H3("This is a live flask app built on top of an ELT pipeline, built using Python, Dash, SQL, Pandas, React.js, CSS, & Bootstrap. It queries data from a Snowflake data warehouse.", style={'text-align': 'left', 'color':'#8DC6FF', 'font-family':'Times New Roman'}),],)],width=8),
 
                 dbc.Col(html.Div([html.A(
                     href="https://github.com/MubassirAhmed/Dash",
@@ -731,3 +732,4 @@ def update_chart2_slider(chart2_time_range_type):
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
     app.run_server(debug=True)
+
